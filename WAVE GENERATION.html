@@ -1,0 +1,65 @@
+<canvas id='c' width='1600' height='400'></canvas><br/>
+<input id='inp' type='range' min='0' max='200' step='1' value='50' oninput='radiusInp()'> 
+<style>
+    *{margin: 0; padding: 0;}
+    html, body{
+        height: 100%;
+        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+</style>
+<script>
+    var cnv = document.getElementById('c');
+    cnv.width = window.innerWidth;
+	var ctx = cnv.getContext('2d');
+
+	var time = 0;
+	var wave = [];
+	var radius = document.getElementById('inp').value;
+    
+    
+	
+	function radiusInp(){
+	radius = document.getElementById('inp').value;
+	}
+
+	function draw(){
+	ctx.fillStyle = 'black';
+	ctx.fillRect(0, 0, 1600, 400);
+	
+	ctx.beginPath();
+	ctx.strokeStyle = 'white';
+    	ctx.arc(300, 200, radius, 0, Math.PI*2, true);
+	ctx.stroke();
+
+	let x = radius * Math.cos(time);
+	let y = radius * Math.sin(time);
+
+	wave.unshift(y);
+	
+	for(var i = 0; i < wave.length; i++){
+		ctx.fillStyle = 'white';
+		ctx.fillRect(i+500, wave[i]+200, 1, 1);
+	}
+
+	ctx.fillStyle = 'white';
+	ctx.beginPath();
+	ctx.arc(x+300, y+200, 6, 0, Math.PI*2, true);
+	ctx.fill();
+
+	ctx.beginPath();
+	ctx.moveTo(x+300, y+200);
+	ctx.lineTo(300, 200);
+	ctx.stroke();
+
+	if(wave.length > 1500){
+	wave.pop();
+	}
+	time+=0.01;
+	}
+
+	setInterval(draw, 1000/60);
+</script>
